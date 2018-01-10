@@ -37,6 +37,8 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
     private EditText mEditDate;
     private EditText mEditPlace;
 
+    // TODO: override onCreate to retrieve the event
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
                 showDatePicker();
             }
         });
+
+        // TODO: set EditText values if not null
 
         return view;
     }

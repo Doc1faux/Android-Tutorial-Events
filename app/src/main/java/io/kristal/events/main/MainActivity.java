@@ -43,6 +43,7 @@ public final class MainActivity extends AppCompatActivity {
 
         ListView listView = findViewById(android.R.id.list);
         listView.setAdapter(mAdapter);
+        // TODO: set OnItemClickListener on listView and start EditActivity passing the event
 
         if (savedInstanceState == null) {
             reset();
@@ -74,6 +75,7 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO: retrieve the edited event & edit it instead of adding it
         if (requestCode == 0
             && resultCode == CreateActivity.RESULT_CREATED) {
             Event event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);

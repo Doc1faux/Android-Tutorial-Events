@@ -27,6 +27,9 @@
         <activity android:name=".detail.CreateActivity"
             android:label="@string/create_label" />
 
+        <activity android:name=".detail.EditActivity"
+            android:label="@string/edit_label" />
+
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@
 
     <string name="app_label">Events</string>
     <string name="create_label">Create</string>
+    <string name="edit_label">Edit</string>
     <string name="hello_world">Hello World</string>
 
     <string name="action_add">Add</string>
