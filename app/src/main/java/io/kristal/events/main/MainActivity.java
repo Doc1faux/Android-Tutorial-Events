@@ -33,8 +33,6 @@ public final class MainActivity extends AppCompatActivity {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
-    private static String RESET_URL = "http://cobaltians.org/events.json";
-
     private MainAdapter mAdapter;
     private RequestQueue mRequestQueue;
 
@@ -58,7 +56,12 @@ public final class MainActivity extends AppCompatActivity {
             }
         });
 
-        reset();
+        if (savedInstanceState == null) {
+            reset();
+        }
+        else {
+            reload();
+        }
     }
 
     @Override
@@ -73,7 +76,8 @@ public final class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_add:
-                startActivityForResult(new Intent(this, CreateActivity.class), 0);
+                startActivityForResult(new Intent(this, CreateActivity.class),
+                        0);
                 return true;
             case R.id.action_restore:
                 reset();
@@ -86,7 +90,7 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         boolean handled = false;
-        
+
         if (requestCode == 0) {
             Event event;
             switch(resultCode) {
@@ -115,20 +119,22 @@ public final class MainActivity extends AppCompatActivity {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
 
-        mRequestQueue.add(new JsonArrayRequest(RESET_URL,
+        mRequestQueue.add(new JsonArrayRequest("http://cobaltians.org/events.json",
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         EventsList.setAll(MainActivity.this, response);
                         reload();
 
-                        Toast.makeText(MainActivity.this, R.string.reset_success, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, R.string.reset_success,
+                                Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, R.string.reset_error, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, R.string.reset_error,
+                                Toast.LENGTH_LONG).show();
 
                         Log.e(TAG, "reset: " + error.getMessage());
                         error.printStackTrace();

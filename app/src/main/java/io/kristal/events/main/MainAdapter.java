@@ -35,9 +35,11 @@ final class MainAdapter extends ArrayAdapter<Event> {
         TextView dateTextView = view.findViewById(R.id.text_date);
 
         Event event = getItem(position);
-        titleTextView.setText(event.getTitle());
-        placeTextView.setText(event.getPlace());
-        dateTextView.setText(sDateFormat.format(event.getDate()));
+        if (event != null) {
+            titleTextView.setText(event.getTitle());
+            placeTextView.setText(event.getPlace());
+            dateTextView.setText(sDateFormat.format(event.getDate()));
+        }
 
         return view;
     }

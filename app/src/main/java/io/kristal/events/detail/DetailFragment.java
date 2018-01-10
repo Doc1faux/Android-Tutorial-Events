@@ -47,10 +47,14 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
                 mEvent = args.getParcelable(DetailActivity.EXTRA_EVENT);
             }
         }
+        else {
+            mEvent = savedInstanceState.getParcelable(DetailActivity.EXTRA_EVENT);
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         mEditTitle = view.findViewById(R.id.form_title);
@@ -100,10 +104,19 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
         super.onActivityCreated(savedInstanceState);
 
         String place = mEditPlace.getText().toString();
-        if (savedInstanceState == null
-            && place.length() > 0
+        if (place.length() > 0
             && mListener != null) {
             mListener.onPlaceTextChanged(place);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Event event = getEvent();
+        if (event != null) {
+            outState.putParcelable(DetailActivity.EXTRA_EVENT, mEvent);
         }
     }
 

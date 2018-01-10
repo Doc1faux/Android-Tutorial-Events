@@ -101,7 +101,7 @@ public final class Event implements Parcelable {
         mPlace = place;
     }
 
-    public static @Nullable Event fromJSON(@NonNull Context context, @NonNull JSONObject json) {
+    static @Nullable Event fromJSON(@NonNull Context context, @NonNull JSONObject json) {
         try {
             return new Event(context, json);
         }
@@ -110,7 +110,7 @@ public final class Event implements Parcelable {
         }
     }
 
-    public long getIdentifier() {
+    long getIdentifier() {
         return mIdentifier;
     }
 

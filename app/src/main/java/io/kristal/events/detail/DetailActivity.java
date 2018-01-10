@@ -45,11 +45,10 @@ public abstract class DetailActivity extends AppCompatActivity implements OnMapR
 
         setContentView(R.layout.activity_detail);
 
-        if (savedInstanceState == null) {
-            mDetail = ((DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail));
-            mDetail.setPlaceTextListener(this);
-            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
-        }
+        mDetail = ((DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail));
+        mDetail.setPlaceTextListener(this);
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+                .getMapAsync(this);
     }
 
     @Override
@@ -85,7 +84,8 @@ public abstract class DetailActivity extends AppCompatActivity implements OnMapR
     private void setPlace(String place) {
         if (mMap != null) {
             try {
-                List<Address> addresses = new Geocoder(this).getFromLocationName(place, 1);
+                List<Address> addresses = new Geocoder(this).getFromLocationName(place,
+                        1);
                 if (! addresses.isEmpty()) {
                     Address address = addresses.get(0);
 
@@ -97,7 +97,6 @@ public abstract class DetailActivity extends AppCompatActivity implements OnMapR
                         mMarker.setPosition(latLng);
                         mMarker.setTitle(place);
                     }
-
                     if (mPendingPlace == null) {
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     }
@@ -106,10 +105,9 @@ public abstract class DetailActivity extends AppCompatActivity implements OnMapR
                     }
                 }
                 else {
-                    Toast.makeText(this, "No address found", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "No address found", Toast.LENGTH_LONG).show();
                 }
-            }
-            catch (IOException exception) {
+            } catch (IOException exception) {
                 Toast.makeText(this, "Network unavailable", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "setPlace: network unavailable");
                 exception.printStackTrace();
