@@ -1,8 +1,12 @@
 package io.kristal.events.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +21,8 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 
 import io.kristal.events.R;
+import io.kristal.events.detail.CreateActivity;
+import io.kristal.events.detail.DetailActivity;
 import io.kristal.events.model.Event;
 import io.kristal.events.model.EventsList;
 
@@ -43,6 +49,39 @@ public final class MainActivity extends AppCompatActivity {
         }
         else {
             reload();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_add) {
+            startActivityForResult(new Intent(this, CreateActivity.class),
+                    0);
+            return true;
+        }
+        else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0
+            && resultCode == CreateActivity.RESULT_CREATED) {
+            Event event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
+            EventsList.addEvent(event);
+            reload();
+        }
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

@@ -46,6 +46,21 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
         mEditDate = view.findViewById(R.id.form_date);
         mEditPlace = view.findViewById(R.id.form_place);
 
+        mEditDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    showDatePicker();
+                }
+            }
+        });
+        mEditDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker();
+            }
+        });
+
         return view;
     }
 
