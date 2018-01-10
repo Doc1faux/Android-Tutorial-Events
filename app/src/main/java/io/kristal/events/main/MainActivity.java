@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.ArrayList;
 
 import io.kristal.events.R;
-import io.kristal.events.main.model.Event;
-import io.kristal.events.main.model.EventsList;
+import io.kristal.events.model.Event;
+import io.kristal.events.model.EventsList;
 
 public final class MainActivity extends AppCompatActivity {
 
