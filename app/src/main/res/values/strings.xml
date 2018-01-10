@@ -16,4 +16,6 @@
     <string name="detail_label_date">Date</string>
     <string name="detail_label_place">Place</string>
 
+    <string name="check_error">Please fill mandatory fields Title and Date</string>
+
 </resources>

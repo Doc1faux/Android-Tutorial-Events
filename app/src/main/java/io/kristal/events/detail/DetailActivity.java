@@ -27,10 +27,13 @@ import io.kristal.events.R;
  * Created by sebastien on 10/01/2018.
  */
 
-abstract class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
+public abstract class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, PlaceTextListener {
 
     protected static final String TAG = DetailActivity.class.getSimpleName();
 
+    public static String EXTRA_EVENT = "io.kristal.events.detail.DetailActivity.EXTRA_EVENT";
+
+    protected DetailFragment mDetail;
     private GoogleMap mMap;
     private Marker mMarker;
 
@@ -41,6 +44,8 @@ abstract class DetailActivity extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.activity_detail);
 
         if (savedInstanceState == null) {
+            mDetail = ((DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail));
+            mDetail.setPlaceTextListener(this);
             ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
         }
     }
@@ -67,10 +72,15 @@ abstract class DetailActivity extends AppCompatActivity implements OnMapReadyCal
     protected abstract void onCheckOptionsItemSelected();
 
     private void onPlaceChanged(String place) {
-        ((DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail)).onPlaceChanged(place);
+        mDetail.onPlaceChanged(place);
     }
 
-    void setPlace(String place) {
+    @Override
+    public void onPlaceTextChanged(String place) {
+        setPlace(place);
+    }
+
+    private void setPlace(String place) {
         try {
             List<Address> addresses = new Geocoder(this).getFromLocationName(place, 1);
             if (! addresses.isEmpty()) {

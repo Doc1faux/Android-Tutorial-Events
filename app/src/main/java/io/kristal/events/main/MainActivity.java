@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import io.kristal.events.R;
 import io.kristal.events.detail.CreateActivity;
+import io.kristal.events.detail.DetailActivity;
 import io.kristal.events.model.Event;
 import io.kristal.events.model.EventsList;
 
@@ -70,14 +71,26 @@ public final class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_add:
-                // TODO: for result
-                startActivity(new Intent(this, CreateActivity.class));
+                startActivityForResult(new Intent(this, CreateActivity.class), 0);
                 return true;
             case R.id.action_restore:
                 reset();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0
+            && resultCode == CreateActivity.RESULT_CREATED) {
+            Event event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
+            EventsList.addEvent(event);
+            reload();
+        }
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -90,14 +103,8 @@ public final class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG, "reset: " + response.toString());
-
-                        EventsList.setAll(response);
-                        ArrayList<Event> events = EventsList.getAll();
-                        if (! mAdapter.isEmpty()) {
-                            mAdapter.clear();
-                        }
-                        mAdapter.addAll(events);
+                        EventsList.setAll(MainActivity.this, response);
+                        reload();
 
                         Toast.makeText(MainActivity.this, R.string.reset_success, Toast.LENGTH_LONG).show();
                     }
@@ -111,5 +118,13 @@ public final class MainActivity extends AppCompatActivity {
                         error.printStackTrace();
                     }
                 }));
+    }
+
+    private void reload() {
+        ArrayList<Event> events = EventsList.getAll();
+        if (! mAdapter.isEmpty()) {
+            mAdapter.clear();
+        }
+        mAdapter.addAll(events);
     }
 }

@@ -24,11 +24,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".detail.CreateActivity"
-            android:parentActivityName=".main.MainActivity" />
+        <activity android:name=".detail.CreateActivity" />
 
-        <activity android:name=".detail.EditActivity"
-            android:parentActivityName=".main.MainActivity" />
+        <activity android:name=".detail.EditActivity" />
 
     </application>
 

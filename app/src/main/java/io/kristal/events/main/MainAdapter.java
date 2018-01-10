@@ -19,7 +19,7 @@ import io.kristal.events.model.Event;
 
 final class MainAdapter extends ArrayAdapter<Event> {
 
-    private static DateFormat sDateFormat = DateFormat.getDateInstance();
+    private static DateFormat sDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
     MainAdapter(@NonNull Context context, int resource, int textViewResourceId) {
         super(context, resource, textViewResourceId);

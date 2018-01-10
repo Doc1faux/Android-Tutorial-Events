@@ -1,11 +1,11 @@
 package io.kristal.events.model;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -23,13 +23,13 @@ public final class EventsList {
         return sList;
     }
 
-    public static void setAll(@NonNull JSONArray events) {
+    public static void setAll(Context context, @NonNull JSONArray events) {
         int eventsLength = events.length();
         sList = new ArrayList<>(eventsLength);
 
         for (int i = 0; i < eventsLength ; i++) {
             try {
-                Event event = Event.fromJSON(events.getJSONObject(i));
+                Event event = Event.fromJSON(context, events.getJSONObject(i));
                 if (event != null) {
                     sList.add(event);
                 }
@@ -41,12 +41,8 @@ public final class EventsList {
         }
     }
 
-    public static void addEvent(Event event) {
-
-    }
-
-    public static void removeEvent(Event event) {
-
+    public static void addEvent(@NonNull Event event) {
+        sList.add(event);
     }
 
     public static void editEvent(Event event) {
