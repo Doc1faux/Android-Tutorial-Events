@@ -41,10 +41,14 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: if savedInstanceState != null retrieve event from bundle instead
-        Bundle args = getArguments();
-        if (args != null) {
-            mEvent = args.getParcelable(DetailActivity.EXTRA_EVENT);
+        if (savedInstanceState == null) {
+            Bundle args = getArguments();
+            if (args != null) {
+                mEvent = args.getParcelable(DetailActivity.EXTRA_EVENT);
+            }
+        }
+        else {
+            mEvent = savedInstanceState.getParcelable(DetailActivity.EXTRA_EVENT);
         }
     }
 
@@ -80,8 +84,16 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
 
         return view;
     }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-    // TODO: override onSaveInstanceState method & save current event
+        Event event = getEvent();
+        if (event != null) {
+            outState.putParcelable(DetailActivity.EXTRA_EVENT, mEvent);
+        }
+    }
 
     @Nullable
     Event getEvent() {
