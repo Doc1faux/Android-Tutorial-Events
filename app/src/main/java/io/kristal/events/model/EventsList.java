@@ -1,4 +1,4 @@
-package io.kristal.events.main.model;
+package io.kristal.events.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
