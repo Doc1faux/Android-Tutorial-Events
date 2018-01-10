@@ -32,8 +32,8 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void reset() {
-        // TODO: init RequestQueue if null, then add request to "http://cobaltians.org/events.json"
-        // & handle result (note: save events with `EventsList.setAll(Context, JSONArray)`)
+        // TODO: init RequestQueue if null, then add request to "http://cobaltians.org/events.json",
+        // save events with `EventsList.setAll(Context, JSONArray)` & call `reload()` method
     }
 
     private void reload() {
