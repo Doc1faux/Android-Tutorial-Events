@@ -19,4 +19,5 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
+    // TODO: add volley library 'com.android.volley:volley:1.0.0'
 }

@@ -3,4 +3,6 @@
     <string name="app_label">Events</string>
     <string name="hello_world">Hello World</string>
 
+    <!-- TODO: Add action_restore, reset_success/error, row_title/date/place_placeholder strings -->
+
 </resources>
