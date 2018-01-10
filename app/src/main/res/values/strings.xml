@@ -5,4 +5,9 @@
 
     <string name="reset_success">Events reset</string>
     <string name="reset_error">Error while retrieving default events</string>
+
+    <string name="row_title_placeholder">Turing birthday</string>
+    <string name="row_date_placeholder">23/06/1912</string>
+    <string name="row_place_placeholder">London</string>
+
 </resources>

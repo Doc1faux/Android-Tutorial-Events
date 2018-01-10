@@ -1,11 +1,14 @@
-package io.kristal.events;
+package io.kristal.events.main;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -18,6 +21,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import io.kristal.events.R;
 import io.kristal.events.model.Event;
 import io.kristal.events.model.EventsList;
 
@@ -27,12 +31,26 @@ public final class MainActivity extends AppCompatActivity {
 
     private static String RESET_URL = "http://cobaltians.org/events.json";
 
+    private MainAdapter mAdapter;
     private RequestQueue mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAdapter = new MainAdapter(this, R.layout.row_main, R.id.text_title);
+
         setContentView(R.layout.activity_main);
+
+        ListView listView = findViewById(android.R.id.list);
+        listView.setAdapter(mAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "ListView - onItemClick: "+ position);
+            }
+        });
 
         reset();
     }
@@ -70,7 +88,10 @@ public final class MainActivity extends AppCompatActivity {
 
                         EventsList.setAll(response);
                         ArrayList<Event> events = EventsList.getAll();
-                        Log.d(TAG, "reset: " + events.toString());
+                        if (! mAdapter.isEmpty()) {
+                            mAdapter.clear();
+                        }
+                        mAdapter.addAll(events);
 
                         Toast.makeText(MainActivity.this, R.string.reset_success, Toast.LENGTH_LONG).show();
                     }
