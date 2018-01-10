@@ -2,6 +2,17 @@ package io.kristal.events.main;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -13,15 +24,19 @@ public final class MainActivity extends AppCompatActivity {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
+    private MainAdapter mAdapter;
+    private RequestQueue mRequestQueue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: init adapter with Constructor(Context, ResId, ResId)
+        mAdapter = new MainAdapter(this, R.layout.row_main, R.id.text_title);
 
         setContentView(R.layout.activity_main);
 
-        // TODO: retrieve ListView & set adapter
+        ListView listView = findViewById(android.R.id.list);
+        listView.setAdapter(mAdapter);
 
         if (savedInstanceState == null) {
             reset();
@@ -32,12 +47,38 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void reset() {
-        // TODO: init RequestQueue if null, then add request to "http://cobaltians.org/events.json",
-        // save events with `EventsList.setAll(Context, JSONArray)` & call `reload()` method
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+
+        mRequestQueue.add(new JsonArrayRequest("http://cobaltians.org/events.json",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        EventsList.setAll(MainActivity.this, response);
+                        reload();
+
+                        Toast.makeText(MainActivity.this, R.string.reset_success,
+                                Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, R.string.reset_error,
+                                Toast.LENGTH_LONG).show();
+
+                        Log.e(TAG, "reset: " + error.getMessage());
+                        error.printStackTrace();
+                    }
+                }));
     }
 
     private void reload() {
         ArrayList<Event> events = EventsList.getAll();
-        // TODO: reload adapter data
+        if (! mAdapter.isEmpty()) {
+            mAdapter.clear();
+        }
+        mAdapter.addAll(events);
     }
 }

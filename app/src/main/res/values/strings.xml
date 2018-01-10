@@ -3,6 +3,11 @@
     <string name="app_label">Events</string>
     <string name="hello_world">Hello World</string>
 
-    <!-- TODO: Add reset_success/error, row_title/date/place_placeholder strings -->
+    <string name="reset_success">Events reset</string>
+    <string name="reset_error">Error while retrieving default events</string>
+
+    <string name="row_title_placeholder">Turing birthday</string>
+    <string name="row_date_placeholder">06/23/1912</string>
+    <string name="row_place_placeholder">London</string>
 
 </resources>
