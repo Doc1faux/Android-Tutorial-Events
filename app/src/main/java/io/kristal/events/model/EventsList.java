@@ -45,7 +45,13 @@ public final class EventsList {
         sList.add(event);
     }
 
-    public static void editEvent(Event event) {
-
+    public static void editEvent(Event editedEvent) {
+        long identifier = editedEvent.getIdentifier();
+        for (Event event : sList) {
+            if (identifier == event.getIdentifier()) {
+                sList.set(sList.indexOf(event), editedEvent);
+                break;
+            }
+        }
     }
 }

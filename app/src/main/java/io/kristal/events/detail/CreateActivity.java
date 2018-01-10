@@ -12,7 +12,7 @@ import io.kristal.events.model.Event;
 
 public final class CreateActivity extends DetailActivity {
 
-    public static int RESULT_CREATED = -1;
+    public static final int RESULT_CREATED = -1;
 
     @Override
     protected void onCheckOptionsItemSelected() {

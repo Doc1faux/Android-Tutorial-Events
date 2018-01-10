@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import io.kristal.events.R;
 import io.kristal.events.detail.CreateActivity;
 import io.kristal.events.detail.DetailActivity;
+import io.kristal.events.detail.EditActivity;
 import io.kristal.events.model.Event;
 import io.kristal.events.model.EventsList;
 
@@ -51,13 +52,14 @@ public final class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "ListView - onItemClick: "+ position);
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_EVENT, mAdapter.getItem(position));
+                startActivityForResult(intent, 0);
             }
         });
 
         reset();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,13 +85,27 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0
-            && resultCode == CreateActivity.RESULT_CREATED) {
-            Event event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
-            EventsList.addEvent(event);
-            reload();
+        boolean handled = false;
+        
+        if (requestCode == 0) {
+            Event event;
+            switch(resultCode) {
+                case CreateActivity.RESULT_CREATED:
+                    event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
+                    EventsList.addEvent(event);
+                    reload();
+                    handled = true;
+                    break;
+                case EditActivity.RESULT_EDITED:
+                    event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
+                    EventsList.editEvent(event);
+                    reload();
+                    handled = true;
+                    break;
+            }
         }
-        else {
+
+        if (! handled) {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }

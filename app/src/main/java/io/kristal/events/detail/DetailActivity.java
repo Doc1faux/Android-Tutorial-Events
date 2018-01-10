@@ -27,7 +27,8 @@ import io.kristal.events.R;
  * Created by sebastien on 10/01/2018.
  */
 
-public abstract class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, PlaceTextListener {
+public abstract class DetailActivity extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleMap.OnMapLongClickListener, PlaceTextListener {
 
     protected static final String TAG = DetailActivity.class.getSimpleName();
 
@@ -36,6 +37,7 @@ public abstract class DetailActivity extends AppCompatActivity implements OnMapR
     protected DetailFragment mDetail;
     private GoogleMap mMap;
     private Marker mMarker;
+    private String mPendingPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,29 +83,40 @@ public abstract class DetailActivity extends AppCompatActivity implements OnMapR
     }
 
     private void setPlace(String place) {
-        try {
-            List<Address> addresses = new Geocoder(this).getFromLocationName(place, 1);
-            if (! addresses.isEmpty()) {
-                Address address = addresses.get(0);
+        if (mMap != null) {
+            try {
+                List<Address> addresses = new Geocoder(this).getFromLocationName(place, 1);
+                if (! addresses.isEmpty()) {
+                    Address address = addresses.get(0);
 
-                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                if (mMarker == null) {
-                    mMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(place));
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    if (mMarker == null) {
+                        mMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(place));
+                    }
+                    else {
+                        mMarker.setPosition(latLng);
+                        mMarker.setTitle(place);
+                    }
+
+                    if (mPendingPlace == null) {
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    }
+                    else {
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7));
+                    }
                 }
                 else {
-                    mMarker.setPosition(latLng);
-                    mMarker.setTitle(place);
+                    Toast.makeText(this, "No address found", Toast.LENGTH_LONG);
                 }
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             }
-            else {
-                Toast.makeText(this, "No address found", Toast.LENGTH_LONG);
+            catch (IOException exception) {
+                Toast.makeText(this, "Network unavailable", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "setPlace: network unavailable");
+                exception.printStackTrace();
             }
         }
-        catch (IOException exception) {
-            Toast.makeText(this, "Network unavailable", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "setPlace: network unavailable");
-            exception.printStackTrace();
+        else {
+            mPendingPlace = place;
         }
     }
 
@@ -113,15 +126,22 @@ public abstract class DetailActivity extends AppCompatActivity implements OnMapR
 
         mMap.setOnMapLongClickListener(this);
 
-        LatLng latLng = new LatLng(48.732041, -3.459063);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7));
+        if (mPendingPlace != null) {
+            setPlace(mPendingPlace);
+            mPendingPlace = null;
+        }
+        else {
+            LatLng latLng = new LatLng(48.732041, -3.459063);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7));
+        }
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
         String place = "Unknown";
         try {
-            List<Address> addresses = new Geocoder(this).getFromLocation(latLng.latitude, latLng.longitude, 1);
+            List<Address> addresses = new Geocoder(this).getFromLocation(latLng.latitude,
+                    latLng.longitude, 1);
             String locality = (addresses.isEmpty() ? null : addresses.get(0).getLocality());
             if (locality != null) {
                 place = locality;

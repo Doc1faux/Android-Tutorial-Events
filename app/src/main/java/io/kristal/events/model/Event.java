@@ -127,15 +127,15 @@ public final class Event implements Parcelable {
     }
 
     public void setTitle(@NonNull String title) {
-        mTitle = mTitle;
+        mTitle = title;
     }
 
     public void setDate(@NonNull Date date) {
-        mDate = mDate;
+        mDate = date;
     }
 
     public void setPlace(@NonNull String place) {
-        mPlace = mPlace;
+        mPlace = place;
     }
 
     @Override

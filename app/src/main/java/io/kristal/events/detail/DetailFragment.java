@@ -38,6 +38,18 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
     private EditText mEditPlace;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            Bundle args = getArguments();
+            if (args != null) {
+                mEvent = args.getParcelable(DetailActivity.EXTRA_EVENT);
+            }
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
@@ -74,7 +86,25 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
             }
         });
 
+        if (mEvent != null) {
+            mEditTitle.setText(mEvent.getTitle());
+            mEditPlace.setText(mEvent.getPlace());
+            mEditDate.setText(sDateFormat.format(mEvent.getDate()));
+        }
+
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        String place = mEditPlace.getText().toString();
+        if (savedInstanceState == null
+            && place.length() > 0
+            && mListener != null) {
+            mListener.onPlaceTextChanged(place);
+        }
     }
 
     void setPlaceTextListener(PlaceTextListener listener) {
