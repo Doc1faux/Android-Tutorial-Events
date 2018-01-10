@@ -37,7 +37,15 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
     private EditText mEditDate;
     private EditText mEditPlace;
 
-    // TODO: override onCreate to retrieve the event
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mEvent = args.getParcelable(DetailActivity.EXTRA_EVENT);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -63,7 +71,11 @@ public final class DetailFragment extends Fragment implements DatePickerDialog.O
             }
         });
 
-        // TODO: set EditText values if not null
+        if (mEvent != null) {
+            mEditTitle.setText(mEvent.getTitle());
+            mEditPlace.setText(mEvent.getPlace());
+            mEditDate.setText(sDateFormat.format(mEvent.getDate()));
+        }
 
         return view;
     }

@@ -1,6 +1,8 @@
 package io.kristal.events.detail;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import io.kristal.events.R;
@@ -13,8 +15,17 @@ import io.kristal.events.model.Event;
 public final class EditActivity extends DetailActivity {
 
     public static final int RESULT_EDITED = -2;
+    
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
 
-    // TODO: override onAttachFragment and pass the event to the DetailFragment
+        if (fragment instanceof DetailFragment) {
+            Bundle bundle = new Bundle(1);
+            bundle.putParcelable(EXTRA_EVENT, getIntent().getParcelableExtra(EXTRA_EVENT));
+            fragment.setArguments(bundle);
+        }
+    }
 
     @Override
     protected void onCheckOptionsItemSelected() {

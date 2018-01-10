@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import io.kristal.events.R;
 import io.kristal.events.detail.CreateActivity;
 import io.kristal.events.detail.DetailActivity;
+import io.kristal.events.detail.EditActivity;
 import io.kristal.events.model.Event;
 import io.kristal.events.model.EventsList;
 
@@ -43,7 +46,15 @@ public final class MainActivity extends AppCompatActivity {
 
         ListView listView = findViewById(android.R.id.list);
         listView.setAdapter(mAdapter);
-        // TODO: set OnItemClickListener on listView and start EditActivity passing the event
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_EVENT, mAdapter.getItem(position));
+                startActivityForResult(intent, 0);
+            }
+        });
 
         if (savedInstanceState == null) {
             reset();
@@ -75,14 +86,27 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO: retrieve the edited event & edit it instead of adding it
-        if (requestCode == 0
-            && resultCode == CreateActivity.RESULT_CREATED) {
-            Event event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
-            EventsList.addEvent(event);
-            reload();
+        boolean handled = false;
+
+        if (requestCode == 0) {
+            Event event;
+            switch(resultCode) {
+                case CreateActivity.RESULT_CREATED:
+                    event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
+                    EventsList.addEvent(event);
+                    reload();
+                    handled = true;
+                    break;
+                case EditActivity.RESULT_EDITED:
+                    event = data.getParcelableExtra(DetailActivity.EXTRA_EVENT);
+                    EventsList.editEvent(event);
+                    reload();
+                    handled = true;
+                    break;
+            }
         }
-        else {
+
+        if (! handled) {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
