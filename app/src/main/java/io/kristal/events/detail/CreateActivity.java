@@ -18,7 +18,6 @@ public final class CreateActivity extends DetailActivity {
     protected void onCheckOptionsItemSelected() {
         Event event = mDetail.getEvent();
         if (event != null) {
-            // TODO: set result with created event & finish activity
             Intent intent = new Intent();
             intent.putExtra(EXTRA_EVENT, event);
             setResult(RESULT_CREATED, intent);

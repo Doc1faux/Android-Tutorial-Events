@@ -24,7 +24,6 @@
             </intent-filter>
         </activity>
 
-        <!-- TODO: declare the new activity and add it a new label too -->
         <activity android:name=".detail.CreateActivity"
             android:label="@string/create_label" />
 
