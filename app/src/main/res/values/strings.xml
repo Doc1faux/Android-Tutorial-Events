@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Events</string>
 
+    <string name="action_add">Add</string>
     <string name="action_restore">Restore</string>
+    <string name="action_check">OK</string>
 
     <string name="reset_success">Events reset</string>
     <string name="reset_error">Error while retrieving default events</string>
@@ -9,5 +11,9 @@
     <string name="row_title_placeholder">Turing birthday</string>
     <string name="row_date_placeholder">23/06/1912</string>
     <string name="row_place_placeholder">London</string>
+
+    <string name="detail_label_title">Title</string>
+    <string name="detail_label_date">Date</string>
+    <string name="detail_label_place">Place</string>
 
 </resources>

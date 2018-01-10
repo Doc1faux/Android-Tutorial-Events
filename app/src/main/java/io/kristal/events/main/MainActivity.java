@@ -1,5 +1,6 @@
 package io.kristal.events.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 
 import io.kristal.events.R;
+import io.kristal.events.detail.CreateActivity;
 import io.kristal.events.model.Event;
 import io.kristal.events.model.EventsList;
 
@@ -66,12 +68,16 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_restore) {
-            reset();
-            return true;
-        }
-        else {
-            return super.onOptionsItemSelected(item);
+        switch(item.getItemId()) {
+            case R.id.action_add:
+                // TODO: for result
+                startActivity(new Intent(this, CreateActivity.class));
+                return true;
+            case R.id.action_restore:
+                reset();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
